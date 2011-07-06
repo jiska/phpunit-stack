@@ -12,9 +12,9 @@ end
 def growl(message)
     puts(message)
     message = message.split("\n").last(3);
-    growlnotify = `which growlnotify`.chomp
+    growlnotify = `which notify-send`.chomp
 
-  title = message.find { |e| /FAILURES/ =~ e } ? "FAILURES" : "PASS"
+    title = message.find { |e| /FAILURES/ =~ e } ? "FAILURES" : "PASS"
     if title == "FAILURES"
         image = ".watchr_images/failed.png"
         info = /\x1b\[37;41m\x1b\[2K(.*)/.match(message[1])[1]
@@ -23,6 +23,6 @@ def growl(message)
         info = /\x1b\[30;42m\x1b\[2K(.*)/.match(message[1])[1]
     end
 
-  options = "-w -n Watchr --image '#{File.expand_path(image)}' --html '#{title}'  -m '#{info}'"
+  options = "-i '#{File.expand_path(image)}' '#{title}' '#{info}'"
   system %(#{growlnotify} #{options} &)
 end
